@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор Войны Дронов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- СТАРТОВОЕ МЕНЮ ИГРЫ -->
+    <div id="start-menu" class="menu-overlay">
+        <div class="menu-content">
+            <h1>СИМУЛЯТОР ВОЙНЫ ДРОНОВ v3.0</h1>
+            <p class="menu-desc">Терминал управления беспилотной авиацией и системами ОТРК.</p>
+            
+            <div class="menu-briefing">
+                <h3>📋 ИНСТРУКЦИЯ И РЕЖИМЫ:</h3>
+                <ul>
+                    <li><strong>Кампания за ВСУ / РФ:</strong> Защищайте свои колонны и перехватывайте чужие на марше.</li>
+                    <li><strong>Наблюдение ИИ против ИИ:</strong> Полная симуляция боя. Вы выступаете в роли штабного наблюдателя.</li>
+                    <li><strong>Тактический зум:</strong> Во время атак приближайте камеру, чтобы увидеть пролет ракет и дронов сверху.</li>
+                </ul>
+            </div>
+
+            <h3>ВЫБЕРИТЕ РЕЖИМ СИМУЛЯЦИИ:</h3>
+            <div class="menu-btns modes-grid">
+                <button class="menu-btn btn-ua" onclick="selectMode('UA')">🇺🇦 Режим: Против РФ (За ВСУ)</button>
+                <button class="menu-btn btn-ru" onclick="selectMode('RU')">🇷🇺 Режим: Против ВСУ (За РФ)</button>
+                <button class="menu-btn btn-ai" onclick="selectMode('AI')">🤖 Режим: ИИ против ИИ (Наблюдение)</button>
+            </div>
+
+            <div class="menu-footer-btns">
+                <a href="https://t.me" target="_blank" class="menu-link-btn tg-btn">📢 НАШ ТГ КАНАЛ</a>
+                <button class="menu-link-btn mp-btn" disabled>🌐 МУЛЬТИПЛЕЕР (СКОРО)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ТАКТИЧЕСКИЙ ЭКРАН ПРИБЛИЖЕНИЯ (ВИД СВЕРХУ) -->
+    <div id="zoom-overlay" class="zoom-screen" style="display: none;">
+        <div class="zoom-container">
+            <div class="radar-lines"></div>
+            <div id="zoom-title" class="zoom-header">ВЫЛЕТ СРЕДСТВА: ИСКАНДЕР-М</div>
+            <div class="battlefield-grid" id="battlefield-animation">
+                <!-- Сюда JS будет рендерить летящие сверху ракеты и дроны -->
+            </div>
+            <p style="color: #64748b; font-size: 11px;">[Колесико мыши / Жест: Максимальное приближение x24]</p>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС ИГРЫ -->
+    <div id="game-interface" style="display: none;">
+        <div class="header">
+            <h1>Оператор БПЛА: <span id="faction-title">ВСУ</span> <span id="ai-badge" style="display:none; color:#fbbf24; font-size:14px; margin-left:10px;">[РЕЖИМ НАБЛЮДЕНИЯ]</span></h1>
+            <button id="manual-switch-btn" class="switch-btn" onclick="switchCountry()">🔄 Сменить сторону</button>
+        </div>
+
+        <div class="game-container">
+            <!-- Панель управления ударами -->
+            <div class="main-panel">
+                <h2>Карта боевых действий</h2>
+                <div class="map-section">
+                    <div class="front-sector">
+                        <div id="our-flag" style="font-size: 24px;">🇺🇦</div>
+                        <div id="front-status" style="font-weight:bold; margin-top:5px; color:#b4e6b7;">Линия стабильна</div>
+                    </div>
+                    <div style="font-size: 24px;">🛸</div>
+                    <div class="front-sector">
+                        <div id="enemy-flag" style="font-size: 24px;">🇷🇺</div>
+                        <div id="enemy-defense" style="font-weight:bold; margin-top:5px;">РЭБ и ПВО: Норма</div>
+                    </div>
+                </div>
+
+                <h2>Запуск воздушных средств</h2>
+                <div class="control-btns" id="drone-controls"></div>
+                
+                <button id="turn-btn" class="next-turn-btn" onclick="nextTurn()">⏳ Завершить ход (Сборка и зарядка)</button>
+            </div>
+
+            <!-- Панель ресурсов и логов -->
+            <div class="side-panel">
+                <h2>Склад и Ресурсы</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div>🔋 Батареи</div>
+                        <div class="stat-val" id="energy-txt">10</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>🔧 Детали</div>
+                        <div class="stat-val" id="parts-txt">15</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>🦾 Лаборатории</div>
+                        <div class="stat-val" id="labs-txt">2</div>
+                    </div>
+                </div>
+
+                <h2>Ваш арсенал</h2>
+                <div class="stats-grid" id="arsenal-grid"></div>
+
+                <h2>Монитор ударов</h2>
+                <div class="log-box" id="log-container">
+                    <div class="log-entry system">[Система] Калибровка частот завершена. Дроны готовы к вылету.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
